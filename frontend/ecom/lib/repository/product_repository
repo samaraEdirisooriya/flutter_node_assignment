@@ -1,0 +1,21 @@
+import 'package:dio/dio.dart';
+import '../models/product_model.dart';
+
+class ProductRepository {
+  final Dio _dio = Dio(BaseOptions(baseUrl: 'http://10.0.2.2:5000/api/products'));
+
+  Future<List<Product>> fetchProducts() async {
+    final response = await _dio.get('/');
+    return (response.data as List).map((json) => Product.fromJson(json)).toList();
+  }
+
+  Future<void> deleteProduct(int id) async => await _dio.delete('/$id');
+
+  Future<void> addProduct(Product p) async => await _dio.post('/', data: {
+    'name': p.name, 'price': p.price, 'quantity': p.quantity, 'image': p.image
+  });
+
+  Future<void> updateProduct(Product p) async => await _dio.put('/${p.id}', data: {
+    'name': p.name, 'price': p.price, 'quantity': p.quantity, 'image': p.image
+  });
+}

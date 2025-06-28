@@ -1,9 +1,13 @@
 import 'package:ecom/blocks/auth_/auth_bloc.dart';
 import 'package:ecom/repository/auth_repository.dart';
+import 'package:ecom/repository/product_repository';
 import 'package:ecom/screens/auth/login_page.dart';
 import 'package:ecom/screens/auth/splash_page.dart';
+import 'package:ecom/screens/productList_page.dart';
+import 'package:ecom/screens/test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ecom/blocks/product/product_bloc.dart';
 
 
 void main() {
@@ -15,16 +19,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => AuthBloc(AuthRepository()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>(
+          create: (_) => AuthBloc(AuthRepository()),
+        ),
+        BlocProvider<ProductBloc>(
+          create: (_) => ProductBloc(ProductRepository())..add(LoadProducts()),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Internship App',
         initialRoute: '/',
         routes: {
-          '/': (context) => const SplashPage(),
+          '/': (context) => ProductListPage(),
           '/login': (context) => const LoginPage(),
-          '/home': (context) =>  Container(),
+          '/home': (context) => Container(),
         },
       ),
     );
