@@ -1,19 +1,37 @@
+import 'package:ecom/blocks/auth_/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../constants/app_styles.dart';
 import '../../widgets/custom_text_field.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
+  State<LoginPage> createState() => _LoginPageState();
+}
 
+class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+        final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F4F6),
-      body: Center(
+        backgroundColor: const Color(0xFFF3F4F6),
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthSuccess) {
+            Navigator.pushReplacementNamed(context, '/home');
+          } else if (state is AuthFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+        builder: (context, state) {
+          return  Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Container(
@@ -52,15 +70,17 @@ class LoginPage extends StatelessWidget {
                   controller: passwordController,
                 ),
                 const SizedBox(height: 24),
-
-                // Login Button
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      // TODO: Integrate Dio or Bloc
-                      Navigator.pushReplacementNamed(context, '/dashboard');
-                    },
+                    context.read<AuthBloc>().add(
+                          LoginRequested(
+                            emailController.text.trim(),
+                            passwordController.text.trim(),
+                          ),
+                        );
+                  },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       backgroundColor: Colors.black,
@@ -68,20 +88,25 @@ class LoginPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: Text('Login', style: AppStyles.buttonText),
+                    child: state is AuthLoading ? const CircularProgressIndicator() : Text('Login', style: AppStyles.buttonText),
                   ),
                 ),
 
                 const SizedBox(height: 16),
                 TextButton(
-                  onPressed: () {},
+                 onPressed: () => Navigator.pushReplacementNamed(context, '/register'),
                   child: Text("Forgot your password?", style: AppStyles.linkText),
                 )
               ],
             ),
           ),
         ),
+      );
+        },
       ),
     );
   }
 }
+
+
+
