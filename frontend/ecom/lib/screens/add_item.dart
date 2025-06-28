@@ -1,4 +1,7 @@
+import 'package:ecom/blocks/Product/product_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ecom/models/product_model.dart';
 
 class AddItemPage extends StatefulWidget {
   const AddItemPage({super.key});
@@ -17,23 +20,60 @@ class _AddItemPageState extends State<AddItemPage> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
+      final name = _nameController.text.trim();
+      final priceText = _priceController.text.trim();
+      final image = _imageUrlController.text.trim();
+
+      double? price = double.tryParse(priceText);
+      if (price == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please enter a valid price')),
+        );
+        return;
+      }
+
+      final newProduct = Product(
+        id: 0, // id will be assigned by backend, use 0 or nullable id in model
+        name: name,
+        price: price.toInt(),
+        quantity: 1, // you can add quantity input if needed, default 1
+        image: image,
+      );
+
       setState(() => _isSubmitting = true);
 
-      final newItem = {
-        'name': _nameController.text.trim(),
-        'price': _priceController.text.trim(),
-        'image': _imageUrlController.text.trim(),
-      };
-
-      // TODO: Send `newItem` to database
-      print('New Product: $newItem');
-
-      // Simulate delay
-      Future.delayed(const Duration(seconds: 1), () {
-        setState(() => _isSubmitting = false);
-        Navigator.pop(context, newItem); // return to product list
-      });
+      // Add product event to bloc
+      context.read<ProductBloc>().add(AddProduct(newProduct));
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Listen to ProductBloc state changes to handle success or failure
+    context.read<ProductBloc>().stream.listen((state) {
+      if (state is ProductError && _isSubmitting) {
+        setState(() => _isSubmitting = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${state.message}')),
+        );
+      }
+      if (state is ProductLoaded && _isSubmitting) {
+        setState(() => _isSubmitting = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Product added successfully!')),
+        );
+        Navigator.pop(context); // Go back to product list
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _priceController.dispose();
+    _imageUrlController.dispose();
+    super.dispose();
   }
 
   @override
@@ -63,8 +103,9 @@ class _AddItemPageState extends State<AddItemPage> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _priceController,
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
-                  labelText: 'Price (e.g. Rs. 3500)',
+                  labelText: 'Price (e.g. 3500)',
                   prefixIcon: Icon(Icons.price_change_outlined),
                 ),
                 validator: (value) =>
@@ -85,7 +126,16 @@ class _AddItemPageState extends State<AddItemPage> {
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   onPressed: _isSubmitting ? null : _submitForm,
-                  icon: const Icon(Icons.save),
+                  icon: _isSubmitting
+                      ? const SizedBox(
+                          height: 16,
+                          width: 16,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Icon(Icons.save),
                   label: Text(_isSubmitting ? "Adding..." : "Add Product"),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: theme.colorScheme.primary,
