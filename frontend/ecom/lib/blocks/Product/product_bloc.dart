@@ -16,13 +16,17 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         final products = await repository.fetchProducts();
         emit(ProductLoaded(products));
       } catch (e) {
-        emit(ProductError('Failed to load products'));
+        emit(ProductError(e.toString()));
       }
     });
 
     on<DeleteProduct>((event, emit) async {
-      await repository.deleteProduct(event.id);
-      add(LoadProducts());
+      try {
+        await repository.deleteProduct(event.id);
+        add(LoadProducts());
+      } catch (e) {
+        emit(ProductError(e.toString()));
+      }
     });
   }
 }

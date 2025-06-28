@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecom/blocks/product/product_bloc.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -21,22 +20,23 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthBloc>(
-          create: (_) => AuthBloc(AuthRepository()),
-        ),
+        BlocProvider<AuthBloc>(create: (_) => AuthBloc(AuthRepository())),
         BlocProvider<ProductBloc>(
           create: (_) => ProductBloc(ProductRepository())..add(LoadProducts()),
         ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Internship App',
-        initialRoute: '/',
-        routes: {
-          '/': (context) => ProductListPage(),
-          '/login': (context) => const LoginPage(),
-          '/home': (context) => Container(),
-        },
+      child: Builder(
+        builder:
+            (context) => MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Internship App',
+              initialRoute: '/',
+              routes: {
+                '/': (context) => EcomApp(),
+                '/login': (context) => const LoginPage(),
+                '/home': (context) => Container(),
+              },
+            ),
       ),
     );
   }
