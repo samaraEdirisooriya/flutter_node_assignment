@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../constants/app_styles.dart';
+import '../../widgets/custom_text_field.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -7,6 +9,8 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
 
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F6),
@@ -30,47 +34,23 @@ class LoginPage extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  "Welcome Back ",
-                  style: GoogleFonts.poppins(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
+                Text("Welcome Back 👋", style: AppStyles.heading),
                 const SizedBox(height: 8),
-                Text(
-                  "Login to your account",
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    color: Colors.black54,
-                  ),
-                ),
+                Text("Login to your account", style: AppStyles.subheading),
                 const SizedBox(height: 32),
 
-                // Email
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: const Icon(Icons.email_outlined),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
+                CustomTextField(
+                  label: 'Email',
+                  icon: const Icon(Icons.email_outlined),
+                  controller: emailController,
                 ),
                 const SizedBox(height: 20),
 
-                // Password
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: const Icon(Icons.lock_outline),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                CustomTextField(
+                  label: 'Password',
+                  icon: const Icon(Icons.lock_outline),
+                  isPassword: true,
+                  controller: passwordController,
                 ),
                 const SizedBox(height: 24),
 
@@ -79,7 +59,7 @@ class LoginPage extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      // TODO: Connect to Dio/Bloc
+                      // TODO: Integrate Dio or Bloc
                       Navigator.pushReplacementNamed(context, '/dashboard');
                     },
                     style: ElevatedButton.styleFrom(
@@ -89,28 +69,14 @@ class LoginPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: Text(
-                      'Login',
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: Text('Login', style: AppStyles.buttonText),
                   ),
                 ),
 
                 const SizedBox(height: 16),
-
-                // Footer
                 TextButton(
                   onPressed: () {},
-                  child: Text(
-                    "Forgot your password?",
-                    style: GoogleFonts.poppins(
-                      color: Colors.blueAccent,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  child: Text("Forgot your password?", style: AppStyles.linkText),
                 )
               ],
             ),
