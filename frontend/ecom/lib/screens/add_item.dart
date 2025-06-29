@@ -1,7 +1,8 @@
-import 'package:ecom/blocks/Product/product_bloc.dart';
+
+import 'package:ecom/blocks/product/product_bloc.dart';
+import 'package:ecom/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ecom/models/product_model.dart';
 
 class AddItemPage extends StatefulWidget {
   const AddItemPage({super.key});
@@ -48,27 +49,6 @@ class _AddItemPageState extends State<AddItemPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    // Listen to ProductBloc state changes to handle success or failure
-    context.read<ProductBloc>().stream.listen((state) {
-      if (state is ProductError && _isSubmitting) {
-        setState(() => _isSubmitting = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${state.message}')),
-        );
-      }
-      if (state is ProductLoaded && _isSubmitting) {
-        setState(() => _isSubmitting = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Product added successfully!')),
-        );
-        Navigator.pop(context); // Go back to product list
-      }
-    });
-  }
-
-  @override
   void dispose() {
     _nameController.dispose();
     _priceController.dispose();
@@ -81,74 +61,100 @@ class _AddItemPageState extends State<AddItemPage> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Add New Item"),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Product Name',
-                  prefixIcon: Icon(Icons.label_outline),
+      appBar: AppBar(title: const Text("Add New Item"), centerTitle: true),
+      body: BlocListener<ProductBloc, ProductState>(
+        listener: (context, state) {
+          if (state is ProductError && _isSubmitting) {
+            setState(() => _isSubmitting = false);
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Error: ${state.message}')));
+          }
+          if (state is ProductLoaded && _isSubmitting) {
+            setState(() => _isSubmitting = false);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Product added successfully!')),
+            );
+            Navigator.pop(context); // Go back to product list
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Product Name',
+                    prefixIcon: Icon(Icons.label_outline),
+                  ),
+                  validator:
+                      (value) =>
+                          value == null || value.isEmpty
+                              ? 'Enter product name'
+                              : null,
                 ),
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Enter product name' : null,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _priceController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Price (e.g. 3500)',
-                  prefixIcon: Icon(Icons.price_change_outlined),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _priceController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Price (e.g. 3500)',
+                    prefixIcon: Icon(Icons.price_change_outlined),
+                  ),
+                  validator:
+                      (value) =>
+                          value == null || value.isEmpty
+                              ? 'Enter product price'
+                              : null,
                 ),
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Enter product price' : null,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _imageUrlController,
-                decoration: const InputDecoration(
-                  labelText: 'Image URL',
-                  prefixIcon: Icon(Icons.image_outlined),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _imageUrlController,
+                  decoration: const InputDecoration(
+                    labelText: 'Image URL',
+                    prefixIcon: Icon(Icons.image_outlined),
+                  ),
+                  validator:
+                      (value) =>
+                          value == null || value.isEmpty
+                              ? 'Enter image URL'
+                              : null,
                 ),
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Enter image URL' : null,
-              ),
-              const SizedBox(height: 32),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: _isSubmitting ? null : _submitForm,
-                  icon: _isSubmitting
-                      ? const SizedBox(
-                          height: 16,
-                          width: 16,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Icon(Icons.save),
-                  label: Text(_isSubmitting ? "Adding..." : "Add Product"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.primary,
-                    foregroundColor: Colors.white,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: _isSubmitting ? null : _submitForm,
+                    icon:
+                        _isSubmitting
+                            ? const SizedBox(
+                              height: 16,
+                              width: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                            : const Icon(Icons.save),
+                    label: Text(_isSubmitting ? "Adding..." : "Add Product"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: theme.colorScheme.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 16,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ),

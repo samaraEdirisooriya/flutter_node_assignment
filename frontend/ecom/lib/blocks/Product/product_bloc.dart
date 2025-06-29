@@ -23,7 +23,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<DeleteProduct>((event, emit) async {
       try {
         await repository.deleteProduct(event.id);
-        add(LoadProducts());  // reload after delete
+        add(LoadProducts());
       } catch (e) {
         emit(ProductError(e.toString()));
       }
@@ -32,7 +32,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<AddProduct>((event, emit) async {
       try {
         await repository.addProduct(event.product);
-        add(LoadProducts());  // reload after add
+        add(LoadProducts());
       } catch (e) {
         emit(ProductError(e.toString()));
       }
