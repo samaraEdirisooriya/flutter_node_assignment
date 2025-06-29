@@ -1,4 +1,4 @@
-import 'package:ecom/screens/edit_ProductPage.dart';
+import 'package:ecom/ui/screens/edit_ProductPage.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetailsPage extends StatelessWidget {
@@ -88,7 +88,7 @@ bool isValidUrl(String url) {
               title: name,
               imageUrl: image,
               price: price,
-              id: 5, // You can replace this with the actual product ID // Default quantity or pass as needed
+              id: id, // You can replace this with the actual product ID // Default quantity or pass as needed
             )),
           );
   },

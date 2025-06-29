@@ -4,10 +4,11 @@ import 'package:ecom/blocks/auth_/auth_bloc.dart';
 import 'package:ecom/blocks/product/product_bloc.dart';
 import 'package:ecom/repository/Product_repository.dart';
 import 'package:ecom/repository/auth_repository.dart';
-import 'package:ecom/screens/add_item.dart';
-import 'package:ecom/screens/auth/login_page.dart';
-import 'package:ecom/screens/auth/splash_page.dart';
-import 'package:ecom/screens/test.dart';
+import 'package:ecom/ui/screens/add_item.dart';
+import 'package:ecom/ui/screens/auth/login_page.dart';
+import 'package:ecom/ui/screens/auth/register_page.dart';
+import 'package:ecom/ui/screens/auth/splash_page.dart';
+import 'package:ecom/ui/screens/test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
               routes: {
                 '/': (context) => SplashPage() ,
                 '/login': (context) => LoginPage(),
+                '/register': (context) => RegisterPage(), // Assuming you have a RegisterPage
                 '/home': (context) => EcomApp(), // Add this
                 '/add': (context) => AddItemPage(), // Add this
               },

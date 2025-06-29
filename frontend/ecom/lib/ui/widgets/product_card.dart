@@ -1,4 +1,4 @@
-import 'package:ecom/screens/edit_ProductPage.dart';
+import 'package:ecom/ui/screens/edit_ProductPage.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {

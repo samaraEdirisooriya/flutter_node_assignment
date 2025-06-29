@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:ecom/repository/auth_repository.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,8 +19,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await prefs.setBool('loggedIn', true);
         emit(AuthSuccess());
       } catch (e) {
-        emit(AuthFailure(e.toString()));
+        String errorMsg = 'Login failed. Please try again.';
+
+    if (e is DioException) {
+      if (e.response != null && e.response?.data != null && e.response?.data['message'] != null) {
+        errorMsg = e.response!.data['message'];
+      } else {
+        errorMsg = 'Server error: ${e.message}';
       }
+    }
+
+    emit(AuthFailure(errorMsg));
+  }
     });
 
     on<RegisterRequested>((event, emit) async {

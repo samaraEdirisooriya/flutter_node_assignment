@@ -1,7 +1,9 @@
+import 'package:ecom/blocks/auth_/auth_bloc.dart';
 import 'package:ecom/blocks/product/product_bloc.dart';
-import 'package:ecom/screens/product.dart';
-import 'package:ecom/screens/add_item.dart';
-import 'package:ecom/widgets/product_card.dart';
+import 'package:ecom/ui/screens/auth/login_page.dart';
+import 'package:ecom/ui/screens/product.dart';
+import 'package:ecom/ui/screens/add_item.dart';
+import 'package:ecom/ui/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -42,6 +44,20 @@ class ProductListPage extends StatelessWidget {
                     snap: true,
                     elevation: 2,
                     pinned: true,
+                    actions: [
+                      IconButton(
+                        icon: const Icon(Icons.logout),
+                        onPressed: () {
+                          context.read<AuthBloc>().add(LogoutRequested());
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginPage(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                     expandedHeight: 100,
                     backgroundColor: theme.appBarTheme.backgroundColor,
                     flexibleSpace: FlexibleSpaceBar(
@@ -80,7 +96,7 @@ class ProductListPage extends StatelessWidget {
                                         name: product.name,
                                         price: product.price.toString(),
                                         image: product.image,
-                                        id: product.id, 
+                                        id: product.id,
                                       ),
                                 ),
                               );
@@ -95,9 +111,7 @@ class ProductListPage extends StatelessWidget {
                                   DeleteProduct(product.id),
                                 );
                               },
-                              onUpgade: () {
-                               
-                              },
+                              onUpgade: () {},
                             ),
                           );
                         }, childCount: products.length),
