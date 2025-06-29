@@ -1,20 +1,29 @@
+import 'package:ecom/screens/edit_ProductPage.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
   final String title;
   final String imageUrl;
   final String price;
-  final VoidCallback onDelete; // 👈 Add delete callback
+  final int id;
+  final VoidCallback onDelete;
+  final VoidCallback onUpgade;
+  // 👈 Add delete callback
 
   const ProductCard({
     super.key,
     required this.title,
     required this.imageUrl,
     required this.price,
+    required this.id,
     required this.onDelete,
+    required this.onUpgade,
   });
-
+bool isValidUrl(String url) {
+  return url.startsWith('http://') || url.startsWith('https://');
+}
   @override
+
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
@@ -32,7 +41,8 @@ class ProductCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  imageUrl,
+                  isValidUrl(imageUrl) ? imageUrl : 'https://th.bing.com/th/id/OIP.NN08Yy_-cXhw2B0f8DBgDwHaHa?o=7&pid=ImgDetMain',
+
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
@@ -69,7 +79,17 @@ class ProductCard extends StatelessWidget {
                   Row(
                     children: [
                       OutlinedButton(
-                        onPressed: () {}, // you can wire this later
+                        onPressed: () {
+                           Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EditProductPage(
+              title: title,
+              price: price,
+              id: id,
+              imageUrl: imageUrl,
+            )),
+          );
+                        }, // you can wire this later
                         style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -85,7 +105,12 @@ class ProductCard extends StatelessWidget {
                       ElevatedButton(
                         onPressed: onDelete, // 👈 Trigger delete
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 20, 20, 20),
+                          backgroundColor: const Color.fromARGB(
+                            255,
+                            20,
+                            20,
+                            20,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),

@@ -1,17 +1,24 @@
+import 'package:ecom/blocks/Product/product_bloc.dart';
+import 'package:ecom/screens/edit_ProductPage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductDetailsPage extends StatelessWidget {
   final String name;
   final String price;
   final String image;
+  final int id;
 
   const ProductDetailsPage({
     super.key,
     required this.name,
     required this.price,
     required this.image,
+    required this.id,
   });
-
+bool isValidUrl(String url) {
+  return url.startsWith('http://') || url.startsWith('https://');
+}
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -40,7 +47,7 @@ class ProductDetailsPage extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.network(
-                    image,
+                    isValidUrl(image) ? image : 'https://th.bing.com/th/id/OIP.NN08Yy_-cXhw2B0f8DBgDwHaHa?o=7&pid=ImgDetMain',
                     height: 220,
                     width: 220,
                     fit: BoxFit.cover,
@@ -76,9 +83,17 @@ class ProductDetailsPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton.icon(
-                  onPressed: () {
-                    // TODO: Navigate to edit screen
-                  },
+                 onPressed: () {
+    Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EditProductPage(
+              title: name,
+              imageUrl: image,
+              price: price,
+              id: 5, // You can replace this with the actual product ID // Default quantity or pass as needed
+            )),
+          );
+  },
                   icon: const Icon(Icons.edit_outlined),
                   label: const Text("Edit"),
                   style: ElevatedButton.styleFrom(

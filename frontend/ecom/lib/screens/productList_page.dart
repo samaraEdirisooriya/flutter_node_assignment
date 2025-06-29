@@ -80,6 +80,7 @@ class ProductListPage extends StatelessWidget {
                                         name: product.name,
                                         price: product.price.toString(),
                                         image: product.image,
+                                        id: product.id, 
                                       ),
                                 ),
                               );
@@ -88,10 +89,14 @@ class ProductListPage extends StatelessWidget {
                               title: product.name,
                               price: product.price.toString(),
                               imageUrl: product.image,
+                              id: product.id,
                               onDelete: () {
                                 context.read<ProductBloc>().add(
                                   DeleteProduct(product.id),
                                 );
+                              },
+                              onUpgade: () {
+                               
                               },
                             ),
                           );

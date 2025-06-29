@@ -1,6 +1,7 @@
 import 'package:ecom/blocks/auth_/auth_bloc.dart';
 import 'package:ecom/repository/auth_repository.dart';
 import 'package:ecom/repository/product_repository';
+import 'package:ecom/screens/add_item.dart';
 import 'package:ecom/screens/auth/login_page.dart';
 import 'package:ecom/screens/test.dart';
 import 'package:flutter/material.dart';
@@ -31,8 +32,10 @@ class MyApp extends StatelessWidget {
               initialRoute: '/',
               routes: {
                 '/': (context) => EcomApp(),
-                '/login': (context) => const LoginPage(),
-                '/home': (context) => Container(),
+  '/login': (context) => const LoginPage(),
+  '/home': (context) => Container(), // Add this
+  '/add': (context) => AddItemPage(),      // Add this
+
               },
             ),
       ),
