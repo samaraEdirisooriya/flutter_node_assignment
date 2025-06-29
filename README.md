@@ -2,12 +2,16 @@
 
 This project is a full-stack e-commerce application built with a Flutter frontend and a Node.js (Express) backend. It demonstrates modern state management using BLoC (Business Logic Component) for Flutter and a RESTful API for backend operations.
 
+## Demo
+
+![Demo](assets/demo.gif)
+
 ## Screenshots
 
-| Login            | Product List      | Product Details   |
+| Add              | Product List      | Login  |
 |------------------|------------------|-------------------|
 | ![Login](assets/1.png) | ![List](assets/2.png) | ![Details](assets/3.png) |
-| Edit Product     | Add Product      |                   |
+| Register         |  Product table     |                   |
 | ![Edit](assets/4.png)  | ![Add](assets/5.png)  |                   |
 
 ## Features
