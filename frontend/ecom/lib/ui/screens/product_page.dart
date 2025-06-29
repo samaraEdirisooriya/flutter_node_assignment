@@ -1,5 +1,9 @@
+import 'package:ecom/blocks/product/product_bloc.dart';
 import 'package:ecom/ui/screens/edit_ProductPage.dart';
+import 'package:ecom/ui/screens/ecom_app.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProductDetailsPage extends StatelessWidget {
   final String name;
@@ -14,15 +18,15 @@ class ProductDetailsPage extends StatelessWidget {
     required this.image,
     required this.id,
   });
-bool isValidUrl(String url) {
-  return url.startsWith('http://') || url.startsWith('https://');
-}
+  bool isValidUrl(String url) {
+    return url.startsWith('http://') || url.startsWith('https://');
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
-      
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -32,8 +36,10 @@ bool isValidUrl(String url) {
               height: 80,
               alignment: Alignment.centerLeft,
               child: IconButton(
-                icon: Icon(Icons.arrow_back_ios_new_outlined,
-                    color: theme.colorScheme.primary),
+                icon: Icon(
+                  Icons.arrow_back_ios_new_outlined,
+                  color: theme.colorScheme.primary,
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -45,18 +51,21 @@ bool isValidUrl(String url) {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.network(
-                    isValidUrl(image) ? image : 'https://th.bing.com/th/id/OIP.NN08Yy_-cXhw2B0f8DBgDwHaHa?o=7&pid=ImgDetMain',
+                    isValidUrl(image) ? image : dotenv.env['BaseUrl_Img']!,
                     height: 220,
                     width: 220,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  width: 80,
-                  height: 80,
-                  color: Colors.grey.shade200,
-                  child: const Icon(Icons.broken_image, color: Colors.grey),
-                );
-              },
+                      return Container(
+                        width: 80,
+                        height: 80,
+                        color: Colors.grey.shade200,
+                        child: const Icon(
+                          Icons.broken_image,
+                          color: Colors.grey,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
@@ -81,17 +90,20 @@ bool isValidUrl(String url) {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton.icon(
-                 onPressed: () {
-    Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => EditProductPage(
-              title: name,
-              imageUrl: image,
-              price: price,
-              id: id, // You can replace this with the actual product ID // Default quantity or pass as needed
-            )),
-          );
-  },
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) => EditProductPage(
+                              title: name,
+                              imageUrl: image,
+                              price: price,
+                              id: id,
+                            ),
+                      ),
+                    );
+                  },
                   icon: const Icon(Icons.edit_outlined),
                   label: const Text("Edit"),
                   style: ElevatedButton.styleFrom(
@@ -100,13 +112,19 @@ bool isValidUrl(String url) {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 14,
+                    ),
                   ),
                 ),
                 OutlinedButton.icon(
                   onPressed: () {
-                    // TODO: Confirm and delete
+                    context.read<ProductBloc>().add(DeleteProduct(id));
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const EcomApp()),
+                    );
                   },
                   icon: const Icon(Icons.delete_outline),
                   label: const Text("Delete"),
@@ -116,8 +134,10 @@ bool isValidUrl(String url) {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 14,
+                    ),
                   ),
                 ),
               ],

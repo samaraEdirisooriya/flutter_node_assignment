@@ -1,5 +1,6 @@
 import 'package:ecom/ui/screens/edit_ProductPage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProductCard extends StatelessWidget {
   final String title;
@@ -8,7 +9,6 @@ class ProductCard extends StatelessWidget {
   final int id;
   final VoidCallback onDelete;
   final VoidCallback onUpgade;
-  // 👈 Add delete callback
 
   const ProductCard({
     super.key,
@@ -19,11 +19,11 @@ class ProductCard extends StatelessWidget {
     required this.onDelete,
     required this.onUpgade,
   });
-bool isValidUrl(String url) {
-  return url.startsWith('http://') || url.startsWith('https://');
-}
-  @override
+  bool isValidUrl(String url) {
+    return url.startsWith('http://') || url.startsWith('https://');
+  }
 
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
@@ -41,7 +41,7 @@ bool isValidUrl(String url) {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  isValidUrl(imageUrl) ? imageUrl : 'https://th.bing.com/th/id/OIP.NN08Yy_-cXhw2B0f8DBgDwHaHa?o=7&pid=ImgDetMain',
+                  isValidUrl(imageUrl) ? imageUrl : dotenv.env['BaseUrl_Img']!,
 
                   width: 80,
                   height: 80,
@@ -80,15 +80,18 @@ bool isValidUrl(String url) {
                     children: [
                       OutlinedButton(
                         onPressed: () {
-                           Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => EditProductPage(
-              title: title,
-              price: price,
-              id: id,
-              imageUrl: imageUrl,
-            )),
-          );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => EditProductPage(
+                                    title: title,
+                                    price: price,
+                                    id: id,
+                                    imageUrl: imageUrl,
+                                  ),
+                            ),
+                          );
                         }, // you can wire this later
                         style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -103,7 +106,7 @@ bool isValidUrl(String url) {
                       ),
                       const SizedBox(width: 8),
                       ElevatedButton(
-                        onPressed: onDelete, // 👈 Trigger delete
+                        onPressed: onDelete,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color.fromARGB(
                             255,

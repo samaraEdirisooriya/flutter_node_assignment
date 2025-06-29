@@ -2,7 +2,6 @@ import 'package:ecom/blocks/auth_/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
 
@@ -19,9 +18,7 @@ class SplashPage extends StatelessWidget {
           Navigator.pushReplacementNamed(context, '/login');
         }
       },
-      child: const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      ),
+      child: const Scaffold(body: Center(child: CircularProgressIndicator())),
     );
   }
 }

@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:ecom/models/product_model.dart';
 import 'package:ecom/repository/Product_repository.dart';
-
 import 'package:meta/meta.dart';
-
 part 'product_event.dart';
 part 'product_state.dart';
 
@@ -41,7 +39,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<UpdateProduct>((event, emit) async {
       try {
         await repository.updateProduct(event.product);
-        add(LoadProducts()); // refresh product list
+        add(LoadProducts()); 
       } catch (e) {
         emit(ProductError(e.toString()));
       }
