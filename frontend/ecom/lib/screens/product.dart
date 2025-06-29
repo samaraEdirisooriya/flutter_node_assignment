@@ -1,7 +1,5 @@
-import 'package:ecom/blocks/Product/product_bloc.dart';
 import 'package:ecom/screens/edit_ProductPage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductDetailsPage extends StatelessWidget {
   final String name;
