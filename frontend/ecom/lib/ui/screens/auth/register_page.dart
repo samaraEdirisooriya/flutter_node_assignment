@@ -1,4 +1,5 @@
 import 'package:ecom/blocks/auth_/auth_bloc.dart';
+import 'package:ecom/ui/screens/auth/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../constants/app_styles.dart';
@@ -37,7 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: size.width,
                   height: size.height,
                   child: Center(
@@ -136,9 +137,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
                             TextButton(
                               onPressed: () {
-                                Navigator.pushReplacementNamed(
+                                Navigator.pushReplacement(
                                   context,
-                                  '/login',
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginPage(),
+                                  ),
                                 );
                               },
                               child: Text(

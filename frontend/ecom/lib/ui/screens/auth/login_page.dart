@@ -1,4 +1,6 @@
 import 'package:ecom/blocks/auth_/auth_bloc.dart';
+import 'package:ecom/ui/screens/auth/register_page.dart';
+import 'package:ecom/ui/screens/ecom_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../constants/app_styles.dart';
@@ -23,7 +25,10 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
-            Navigator.pushReplacementNamed(context, '/home');
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const EcomApp()),
+            );
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(
               context,
@@ -100,11 +105,14 @@ class _LoginPageState extends State<LoginPage> {
 
                     const SizedBox(height: 16),
                     TextButton(
-                      onPressed:
-                          () => Navigator.pushReplacementNamed(
-                            context,
-                            '/register',
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterPage(),
                           ),
+                        );
+                      },
                       child: Text(
                         "I Don't have an account? Sign Up",
                         style: AppStyles.linkText,

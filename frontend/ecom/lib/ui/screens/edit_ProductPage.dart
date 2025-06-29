@@ -35,6 +35,10 @@ class EditProductPage extends StatelessWidget {
       isEdit: true,
       onSubmit: (updatedProduct) {
         context.read<ProductBloc>().add(UpdateProduct(updatedProduct));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const EcomApp()),
+        );
       },
     );
   }
