@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 class AuthRepository {
-  final Dio _dio = Dio(BaseOptions(baseUrl: 'http://localhost:5000/api/auth'));
+  final Dio _dio = Dio(BaseOptions(baseUrl: 'http://10.0.2.2:5000/api/auth'));
 
   Future<void> login(String email, String password) async {
     final res = await _dio.post('/login', data: {"email": email, "password": password});

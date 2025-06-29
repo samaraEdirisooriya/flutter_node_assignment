@@ -31,18 +31,14 @@ class _AddItemPageState extends State<AddItemPage> {
         );
         return;
       }
-
       final newProduct = Product(
-        id: 0, // id will be assigned by backend, use 0 or nullable id in model
+        id: 0, 
         name: name,
         price: price.toInt(),
-        quantity: 1, // you can add quantity input if needed, default 1
+        quantity: 1,
         image: image,
       );
-
       setState(() => _isSubmitting = true);
-
-      // Add product event to bloc
       context.read<ProductBloc>().add(AddProduct(newProduct));
     }
   }
@@ -61,7 +57,7 @@ class _AddItemPageState extends State<AddItemPage> {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Add New Item"), centerTitle: true),
-      resizeToAvoidBottomInset: true, // Ensures keyboard pushes content up
+      resizeToAvoidBottomInset: true, 
       body: BlocListener<ProductBloc, ProductState>(
         listener: (context, state) {
           if (state is ProductError && _isSubmitting) {
@@ -79,10 +75,9 @@ class _AddItemPageState extends State<AddItemPage> {
           }
         },
         child: SingleChildScrollView(
-          // <-- Wraps the form
           padding: const EdgeInsets.all(24).add(
             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          ), // Adds padding for keyboard
+          ),
           child: Form(
             key: _formKey,
             child: Column(

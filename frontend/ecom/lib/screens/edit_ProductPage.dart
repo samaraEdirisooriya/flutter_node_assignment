@@ -66,7 +66,7 @@ class _EditProductPageState extends State<EditProductPage> {
   Widget build(BuildContext context) {
         final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text("Upgrade Item"), centerTitle: true),
+      appBar: AppBar(title: const Text("Update Item"), centerTitle: true),
       resizeToAvoidBottomInset: true, // Ensures keyboard pushes content up
       body: BlocListener<ProductBloc, ProductState>(
         listener: (context, state) {
@@ -79,7 +79,7 @@ class _EditProductPageState extends State<EditProductPage> {
           if (state is ProductLoaded && _isSubmitting) {
             setState(() => _isSubmitting = false);
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Product added successfully!')),
+              const SnackBar(content: Text('Product Updated successfully!')),
             );
             Navigator.pop(context); // Go back to product list
           }
@@ -148,7 +148,7 @@ class _EditProductPageState extends State<EditProductPage> {
                               ),
                             )
                             : const Icon(Icons.save),
-                    label: Text(_isSubmitting ? "Adding..." : "Add Product"),
+                    label: Text(_isSubmitting ? "Updating..." : "Update Product"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: theme.colorScheme.primary,
                       foregroundColor: Colors.white,
