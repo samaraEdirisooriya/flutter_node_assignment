@@ -4,19 +4,22 @@ class ProductCard extends StatelessWidget {
   final String title;
   final String imageUrl;
   final String price;
+  final VoidCallback onDelete; // 👈 Add delete callback
 
   const ProductCard({
     super.key,
     required this.title,
     required this.imageUrl,
     required this.price,
+    required this.onDelete,
   });
 
   @override
   Widget build(BuildContext context) {
-        final theme = Theme.of(context);
+    final theme = Theme.of(context);
+
     return Card(
-      color:  Colors.white,
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 4,
@@ -33,6 +36,14 @@ class ProductCard extends StatelessWidget {
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 80,
+                      height: 80,
+                      color: Colors.grey.shade200,
+                      child: const Icon(Icons.broken_image, color: Colors.grey),
+                    );
+                  },
                 ),
               ),
             ),
@@ -58,7 +69,7 @@ class ProductCard extends StatelessWidget {
                   Row(
                     children: [
                       OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {}, // you can wire this later
                         style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -72,15 +83,15 @@ class ProductCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: onDelete, // 👈 Trigger delete
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primary,
+                          backgroundColor: const Color.fromARGB(255, 20, 20, 20),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         child: const Text(
-                          'Edit',
+                          'Delete',
                           style: TextStyle(color: Colors.white),
                         ),
                       ),

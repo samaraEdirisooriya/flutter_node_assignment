@@ -37,5 +37,13 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         emit(ProductError(e.toString()));
       }
     });
+    on<UpdateProduct>((event, emit) async {
+      try {
+        await repository.updateProduct(event.product);
+        add(LoadProducts()); // refresh product list
+      } catch (e) {
+        emit(ProductError(e.toString()));
+      }
+    });
   }
 }

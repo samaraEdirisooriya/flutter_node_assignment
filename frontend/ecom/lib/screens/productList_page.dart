@@ -68,31 +68,34 @@ class ProductListPage extends StatelessWidget {
                     SliverPadding(
                       padding: const EdgeInsets.all(16),
                       sliver: SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final product = products[index];
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ProductDetailsPage(
-                                      name: product.name,
-                                      price: product.price.toString(),
-                                      image: product.image,
-                                    ),
-                                  ),
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          final product = products[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => ProductDetailsPage(
+                                        name: product.name,
+                                        price: product.price.toString(),
+                                        image: product.image,
+                                      ),
+                                ),
+                              );
+                            },
+                            child: ProductCard(
+                              title: product.name,
+                              price: product.price.toString(),
+                              imageUrl: product.image,
+                              onDelete: () {
+                                context.read<ProductBloc>().add(
+                                  DeleteProduct(product.id),
                                 );
                               },
-                              child: ProductCard(
-                                title: product.name,
-                                price: product.price.toString(),
-                                imageUrl: product.image,
-                              ),
-                            );
-                          },
-                          childCount: products.length,
-                        ),
+                            ),
+                          );
+                        }, childCount: products.length),
                       ),
                     ),
                 ],
@@ -107,17 +110,13 @@ class ProductListPage extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => AddItemPage(),
-            ),
+            MaterialPageRoute(builder: (context) => AddItemPage()),
           );
         },
         icon: const Icon(Icons.add),
         label: const Text('Add Item'),
         backgroundColor: theme.colorScheme.primary,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }

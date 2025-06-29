@@ -1,4 +1,3 @@
-
 import 'package:ecom/blocks/product/product_bloc.dart';
 import 'package:ecom/models/product_model.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +61,7 @@ class _AddItemPageState extends State<AddItemPage> {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Add New Item"), centerTitle: true),
+      resizeToAvoidBottomInset: true, // Ensures keyboard pushes content up
       body: BlocListener<ProductBloc, ProductState>(
         listener: (context, state) {
           if (state is ProductError && _isSubmitting) {
@@ -78,8 +78,11 @@ class _AddItemPageState extends State<AddItemPage> {
             Navigator.pop(context); // Go back to product list
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.all(24),
+        child: SingleChildScrollView(
+          // <-- Wraps the form
+          padding: const EdgeInsets.all(24).add(
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          ), // Adds padding for keyboard
           child: Form(
             key: _formKey,
             child: Column(

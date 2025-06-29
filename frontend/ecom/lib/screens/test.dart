@@ -1,11 +1,11 @@
-import 'package:ecom/screens/product.dart';
 import 'package:ecom/screens/productList_page.dart';
-import 'package:ecom/screens/add_item.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
 class EcomApp extends StatelessWidget {
+  const EcomApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
